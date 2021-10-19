@@ -1,0 +1,55 @@
+
+/**
+ * Defines annotation-based metadata for the base adapter layer, which is responsible for collapsing expressed mappings
+ * within an adapter's data model. The base adapter also manages access to any transformations or other code routines
+ * defined on behalf of a given adapter implementation.
+ */
+
+syntax = "proto3";
+
+package opencannabis.adapter;
+
+option optimize_for = SPEED;
+option cc_enable_arenas = true;
+option java_multiple_files = true;
+option java_string_check_utf8 = true;
+option java_outer_classname = "AdapterBase";
+option java_generate_equals_and_hash = true;
+option php_class_prefix = "OCP";
+option objc_class_prefix = "OCP";
+option swift_prefix = "OCP";
+option php_namespace = "OCPAdapter";
+option ruby_package = "OpenCannabis::Adapter::Base";
+option java_package = "io.opencannabis.schema.adapter.base";
+option csharp_namespace = "OpenCannabis.Adapter.Base";
+option go_package = "github.com/OpenCannabis/pos-adapter-base/adapter";
+
+import "google/protobuf/descriptor.proto";
+
+
+// Describes annotations related to an adapter implementation, at the field or model level.
+message AdapterMetadata {
+  // Name of the field or model in a specific vendor context.
+  string name = 1;
+
+  // Doc link for the field or model.
+  string doc = 2;
+
+  // Base model which we intend to work from at this model or field.
+  string base = 3;
+
+  // Binding to apply between this field and the active base model.
+  string bind = 4;
+}
+
+
+// Mounts annotations for a given adapter model.
+extend google.protobuf.MessageOptions {
+  AdapterMetadata model = 420060;
+}
+
+// Mounts annotations for a given adapter model field.
+extend google.protobuf.FieldOptions {
+  // Describes configuration for this field when used in OpenCannabis systems.
+  AdapterMetadata field = 420070;
+}

@@ -1,0 +1,80 @@
+
+/**
+ * Defines the structure and types for an OpenCannabis adapter configuration, normally placed at the root of a Git
+ * repository at `.opencannabis.yml`. The adapter configuration defines such values as the adapter's name and version,
+ * and encloses provider information, configuration, and documentation info.
+ */
+
+syntax = "proto3";
+
+package opencannabis.adapter;
+
+option optimize_for = SPEED;
+option cc_enable_arenas = true;
+option java_multiple_files = true;
+option java_string_check_utf8 = true;
+option java_outer_classname = "AdapterConfig";
+option java_generate_equals_and_hash = true;
+option php_class_prefix = "OCP";
+option objc_class_prefix = "OCP";
+option swift_prefix = "OCP";
+option php_namespace = "OCPAdapter";
+option ruby_package = "OpenCannabis::Adapter::Base";
+option java_package = "io.opencannabis.schema.adapter.base";
+option csharp_namespace = "OpenCannabis.Adapter.Base";
+option go_package = "github.com/OpenCannabis/pos-adapter-base/adapter";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/descriptor.proto";
+
+
+// Describes the structure of an adapter configuration file.
+message AdapterConfig {
+  // Describes the structure of basic adapter metadata.
+  message AdapterMetadata {
+    // Short name of the adapter -- must be all lowercase, and only use letters, numbers, or dashes.
+    string name = 1;
+
+    // Doc link for the field or model.
+    string version = 2;
+
+    // Annotations affixed via metadata.
+    map<string, string> annotations = 3;
+  }
+
+  // Specifies information about an adapter's provider.
+  message AdapterProvider {
+    // Name of the vendor who owns and provides the adapter.
+    string name = 1;
+
+    // Website for the vendor who owns and provides the adapter.
+    string website = 2;
+
+    // Universal OpenCannabis identifier for this member company.
+    string identifier = 3;
+  }
+
+  // Specifies an arbitrary configuration value included in an adapter config.
+  message ParameterValue {
+    // String value enclosed within a configuration.
+    string string_value = 1;
+
+    // Signed integer value enclosed within a configuration.
+    sint64 int_value = 2;
+
+    // Boolean value enclosed within a configuration.
+    bool bool_value = 3;
+  }
+
+  // Specifies required metadata for a given adapter implementation.
+  AdapterMetadata metadata = 1;
+
+  // Specifies provider metadata for a given adapter implementation.
+  AdapterProvider provider = 2;
+
+  // General configuration parameters enclosed with this adapter.
+  map<string, ParameterValue> parameters = 3;
+
+  // Typed configuration provided by the adapter implementation.
+  google.protobuf.Any config = 4;
+}

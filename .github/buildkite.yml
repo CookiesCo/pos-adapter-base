@@ -1,0 +1,14 @@
+
+steps:
+  - label: ":pipeline: Converge build steps"
+    agents: &agentConfig
+      "gcp:project-id": "cookies-co"
+    plugins:
+      - chronotc/monorepo-diff#v2.0.4:
+          diff: "git diff --name-only HEAD~1"
+          watch:
+            - path: adapter/
+              config:
+                label: ":buildkite: Build/Test Adapter"
+                command: "buildkite-agent pipeline upload infra/devops/adapter.build.yml"
+                agents: *agentConfig

@@ -1,0 +1,42 @@
+
+#
+# Bazel: Base Settings
+#
+
+build --embed_label=alpha
+build --show_timestamps
+build --use_ijars
+build --experimental_ui_mode=oldest_actions
+build --workspace_status_command="make status QUIET=yes"
+build --strict_system_includes
+build --incompatible_strict_action_env
+build --symlink_prefix=dist/
+build --nolegacy_external_runfiles
+
+## Debug/Verbose
+build:verbose --verbose_failures
+build:debug --sandbox_debug
+
+## Build Sandboxing
+build --worker_sandboxing
+build --strategy=sandboxed
+build --spawn_strategy=sandboxed
+build --strategy=SassCompiler=sandboxed
+build --strategy=Javac=sandboxed
+build --strategy=Closure=sandboxed
+build --strategy=TypeScriptCompile=sandboxed
+
+## Java
+build --java_header_compilation
+build --strict_java_deps=strict
+
+## Protocol Buffers
+build --strict_proto_deps=strict
+
+## Testing & Coverage
+test:verbose --test_output=streamed
+coverage --collect_code_coverage
+coverage --combined_report=lcov
+coverage --test_env=DISPLAY
+coverage --noinstrument_test_targets
+coverage --ui_event_filters=-DEBUG

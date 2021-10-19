@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  annotations:
+    client.lifecycle.config.k8s.io/mutation: ignore
+  name: cas-echo-private-r1
+spec:
+  commonName: sandbox.echo.cloud.cookies.co
+  dnsNames:
+  - echo.cloud.cookies.co
+  - echo.corp.cookies.co
+  - sandbox.echo.cloud.cookies.co
+  duration: 15120h
+  issuerRef:
+    group: cas-issuer.jetstack.io
+    kind: GoogleCASIssuer
+    name: pki-issuer-mesh
+  renewBefore: 48h
+  secretName: echo-server-tls

@@ -1,0 +1,4 @@
+*.proto linguist-language=Protocol-Buffer linguist-detectable
+*.ts linguist-language=TypeScript linguist-detectable
+*.js linguist-language=JavaScript linguist-detectable
+*.yaml linguist-language=YAML linguist-detectable

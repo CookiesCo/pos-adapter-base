@@ -1,0 +1,10 @@
+*.key
+!tools/tls/selfsigned.key
+node_modules/
+dist/
+bazel-*
+bazel-*/
+.DS_Store
+.env
+.dev
+.ijwb/

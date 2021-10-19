@@ -1,0 +1,5 @@
+steps:
+  - label: ":nodejs: Build/Test Server"
+    agents: &agentConfig
+      "gcp:project-id": "cookies-co"
+    command: "make ci TESTS=//tests/... TARGETS=//adapter CI=yes PUSH=yes"
