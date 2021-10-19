@@ -12,10 +12,10 @@
   resolved "https://registry.yarnpkg.com/@bazel/buildifier/-/buildifier-4.0.1.tgz#52cfbad5cbb86e9183a29dde2370cd465730ea0d"
   integrity sha512-BTmtvJbeeEVrqRApI1gr5hvPgYcHLpdGJ5EXNXEWO692ztMPSj5fB/dH0xUlaW45jn6LimYx8ymqTMhj3538og==
 
-"@bazel/esbuild@4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@bazel/esbuild/-/esbuild-4.0.0.tgz#daa8286d72a9e6522f6f2c514aed9716a331aa25"
-  integrity sha512-SrdJexg+PNjdsTDp0voPS0SlU/yovbwrH+ObtFShHQ2X52u9mqvU2Cm7If48pWobkGK4rl7vDbzIHYWVKdGXlw==
+"@bazel/esbuild@4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@bazel/esbuild/-/esbuild-4.4.0.tgz#4ccb92c5094dc7ed6be80f4d66708b2c2ef9d4f7"
+  integrity sha512-eGFt1O7C/FjTLoZyDHzM8/GJHrpF1oAohouMkKhgnuFhuxIPu8vz44gjY2GGZuIMsf/6rqTA5MBZHcDiujMtww==
 
 "@bazel/jasmine@4.0.0":
   version "4.0.0"

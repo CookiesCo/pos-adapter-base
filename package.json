@@ -14,7 +14,7 @@
     "devDependencies": {
         "@bazel/bazelisk": "1.10.1",
         "@bazel/buildifier": "^4.0.1",
-        "@bazel/esbuild": "4.0.0",
+        "@bazel/esbuild": "4.4.0",
         "@bazel/jasmine": "4.0.0",
         "@bazel/labs": "4.0.0",
         "@bazel/source-map-support": "latest",
