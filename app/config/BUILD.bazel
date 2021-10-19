@@ -1,0 +1,18 @@
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+
+exports_files([
+    "server.json",
+])
+
+
+filegroup(
+    name = "config",
+    srcs = [
+        ":server.json",
+        "//app/config/tls",
+    ],
+)

@@ -1,0 +1,140 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    rules-k8s.bazel.io/gust: |
+      ---
+      app: sample
+      framework: gust
+      engine: node
+  labels:
+    app: sample
+    app.kubernetes.io/name: sample
+    app.kubernetes.io/part-of: echo
+    environment: sandbox
+  name: sample
+spec:
+  minReadySeconds: 3
+  progressDeadlineSeconds: 120
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: sample
+      role: server
+  strategy:
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 30%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: sample
+        app.kubernetes.io/name: sample
+        app.kubernetes.io/part-of: echo
+        engine: jvm
+        revision: v20210831-e0e3030
+        role: server
+        version: v1a
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - app
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: name
+                  operator: In
+                  values:
+                  - sample-app
+              topologyKey: kubernetes.io/hostname
+            weight: 50
+      containers:
+      - env:
+        - name: GUST_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: GUST_ENVIRONMENT
+          value: production
+        - name: TLS_CERT
+          value: /base/tls/tls.crt
+        - name: TLS_KEY
+          value: /base/tls/tls.key
+        - name: PORT
+          value: "8443"
+        - name: APP_VERSION
+          value: v1a
+        - name: SERVER_REVISION
+          value: v20210831-e0e3030
+        - name: K9_WORKLOAD_REGION
+          valueFrom:
+            configMapKeyRef:
+              key: k9.region
+              name: k9-region-info
+        - name: K9_WORKLOAD_NODE
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: K9_WORKLOAD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: us.gcr.io/cookies-co/dev/sample-app/node@sha256:377c63e032aff2596251ad5ce6bf5adf9636afe936921bfc618da627ff52e1dc
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 1
+        name: app
+        ports:
+        - containerPort: 8080
+          name: http
+        - containerPort: 8443
+          name: app
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 2
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 2
+        resources:
+          limits:
+            cpu: "0.05"
+            memory: 256Mi
+          requests:
+            cpu: "0.03"
+            memory: 128Mi
+        volumeMounts:
+        - mountPath: /base/tls
+          name: tls-material
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      serviceAccountName: sample-app
+      tolerations:
+      - key: group
+        operator: Equal
+        value: app
+      - key: role
+        operator: Equal
+        value: app
+      - key: sandbox.gke.io/runtime
+        operator: Equal
+        value: gvisor
+      volumes:
+      - name: tls-material
+        secret:
+          secretName: echo-server-tls

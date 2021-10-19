@@ -1,0 +1,157 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample
+  labels:
+    app: sample
+    app.kubernetes.io/name: sample
+    app.kubernetes.io/part-of: echo
+  annotations:
+    rules-k8s.bazel.io/gust: |
+      ---
+      app: sample
+      framework: gust
+      engine: node
+spec:
+  # -- Replication ----------------------------------------------------------- #
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: sample
+      role: server
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: "30%"
+
+  # -- Timeouts -------------------------------------------------------------- #
+  minReadySeconds: 3
+  progressDeadlineSeconds: 120
+
+  template:
+    metadata:
+      labels:
+        app: sample
+        engine: jvm
+        role: server
+        version: '%{app_version}'
+        revision: '%{server_revision}'
+        app.kubernetes.io/name: sample
+        app.kubernetes.io/part-of: echo
+
+    spec:
+      # -- Networking/Security ------------------------------------------------ #
+      serviceAccountName: sample-app
+      dnsPolicy: ClusterFirst
+
+      # -- Placement ---------------------------------------------------------- #
+      tolerations:
+        - key: group
+          operator: Equal
+          value: app
+        - key: role
+          operator: Equal
+          value: app
+        - key: sandbox.gke.io/runtime
+          operator: Equal
+          value: gvisor
+
+      affinity:
+        # Schedule on app nodes.
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: role
+                    operator: In
+                    values:
+                      - app
+
+        # Schedule away from other sample-app pods.
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 50
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: name
+                      operator: In
+                      values:
+                        - sample-app
+                topologyKey: kubernetes.io/hostname
+
+      # -- Volumes ------------------------------------------------------------ #
+      volumes:
+      - name: tls-material
+        secret:
+          secretName: echo-server-tls
+
+      # -- Containers --------------------------------------------------------- #
+      containers:
+        ## Container: Sample App
+        - name: app
+          image: us.gcr.io/cookies-co/dev/sample-app/node
+          resources:
+            requests:
+              cpu: "0.03"
+              memory: "128Mi"
+            limits:
+              cpu: "0.05"
+              memory: "256Mi"
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: app
+              containerPort: 8443
+          volumeMounts:
+          - name: tls-material
+            mountPath: "/base/tls"
+            readOnly: true
+          env:
+            - name: GUST_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: GUST_ENVIRONMENT
+              value: production
+            - name: TLS_CERT
+              value: '/base/tls/tls.crt'
+            - name: TLS_KEY
+              value: '/base/tls/tls.key'
+            - name: PORT
+              value: '8443'
+            - name: APP_VERSION
+              value: '%{app_version}'
+            - name: SERVER_REVISION
+              value: '%{server_revision}'
+            - name: K9_WORKLOAD_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: k9-region-info
+                  key: k9.region
+            - name: K9_WORKLOAD_NODE
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: K9_WORKLOAD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          readinessProbe:
+            initialDelaySeconds: 2
+            successThreshold: 1
+            timeoutSeconds: 2
+            periodSeconds: 5
+            httpGet:
+              path: /health
+              port: http
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            httpGet:
+              path: /health
+              port: http

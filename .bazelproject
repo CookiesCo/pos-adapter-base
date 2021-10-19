@@ -1,0 +1,25 @@
+
+directories:
+  app
+  infra
+  tests
+  tools
+
+shard_sync: true
+
+build_flags:
+  --config=dev
+
+workspace_type: javascript
+
+additional_languages:
+  typescript
+
+ts_config_rules:
+  //:tsconfig.json
+
+test_sources:
+  tests/*
+
+targets:
+  //app/...

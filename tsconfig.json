@@ -1,0 +1,47 @@
+{
+    "compilerOptions": {
+      /* Basic Options */
+      "target": "es5",
+      "module": "ES2015",
+      "lib": [
+        "es5",
+        "es6",
+        "dom",
+        "dom.iterable",
+        "esnext",
+        "esnext.array",
+        "esnext.asynciterable"
+      ],
+      "allowJs": false,
+      "checkJs": false,
+      "jsx": "react",
+      "outDir": "./dist",
+  
+      /* Strict Type-Checking Options */
+      "strict": true,
+      "sourceMap": true,
+      "skipLibCheck": true,
+      "strictPropertyInitialization": false,
+      "noImplicitThis": false,
+  
+      /* Module Resolution Options */
+      "baseUrl": "./",
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+  
+      /* Decorators */
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "types": ["node"],
+    },
+    "exclude": [
+      "bazel-*",
+      "dist",
+      "node_modules/typescript/*"
+    ],
+    "bazelOptions": {
+      "workspaceName": "app",
+      "tsickleExternsPath": "externs.js"
+    }
+}

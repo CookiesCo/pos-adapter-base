@@ -1,0 +1,38 @@
+apiVersion: skaffold/v2beta9
+kind: Config
+
+metadata:
+  name: app
+
+.bazelargs: &bazelargs
+  args: [
+    "--config=dev",
+    "--config=skaffold",
+  ]
+
+.manifests: &manifests
+  manifests:
+    - .k8s/policy/sandbox/*.yaml
+
+profiles:
+  - name: sandbox
+    activation:
+    - command: dev
+    deploy:
+      kubectl:
+        defaultNamespace: sandbox
+        <<: *manifests
+
+build:
+  tagPolicy:
+    sha256: {}
+  artifacts:
+  - image: us.gcr.io/cookies-co/apps/sample/node
+    bazel:
+      <<: *bazelargs
+      target: //app:image.tar
+
+deploy:
+  kubectl:
+    defaultNamespace: sandbox
+    <<: *manifests

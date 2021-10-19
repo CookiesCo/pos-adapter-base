@@ -1,0 +1,29 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cas-echo-private-r1
+  annotations:
+    client.lifecycle.config.k8s.io/mutation: ignore
+spec:
+  # K8S secret where we should store this.
+  secretName: echo-server-tls
+
+  # Common Name
+  commonName: echo.cloud.cookies.co
+
+  # DNS SAN. Domains must be present in both for use with HTTPS.
+  dnsNames:
+    - echo.cloud.cookies.co
+    - echo.corp.cookies.co
+
+  # Duration of the certificate (3 months)
+  duration: 15120h
+
+  # Renew 8 hours before the certificate expiration
+  renewBefore: 48h
+
+  # Private CAS certificate.
+  issuerRef:
+    group: cas-issuer.jetstack.io
+    kind: GoogleCASIssuer
+    name: pki-issuer-mesh

@@ -1,0 +1,45 @@
+load(
+    "@npm//@bazel/typescript:index.bzl",
+    "ts_config",
+)
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+exports_files([
+    "package.json",
+    "tsconfig.json",
+    "skaffold.yaml",
+])
+
+filegroup(
+    name = "package",
+    srcs = [":package.json"],
+)
+
+ts_config(
+    name = "tsconfig",
+    src = ":tsconfig.json",
+)
+
+alias(
+    name = "backend",
+    actual = "//app/backend",
+)
+
+alias(
+    name = "frontend",
+    actual = "//app/frontend",
+)
+
+alias(
+    name = "image",
+    actual = "//app:image",
+)
+
+## Main entrypoint.
+alias(
+    name = "app",
+    actual = "//app/backend:bin",
+)

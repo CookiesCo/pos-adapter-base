@@ -1,0 +1,10 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cas-echo-private-r1
+spec:
+  commonName: sandbox.echo.cloud.cookies.co
+  dnsNames:
+    - echo.cloud.cookies.co
+    - echo.corp.cookies.co
+    - sandbox.echo.cloud.cookies.co

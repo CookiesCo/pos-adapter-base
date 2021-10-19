@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: sandbox.echo.cloud.cookies.co
+  labels:
+    app: sample
+    role: server
+  name: sample-ext
+spec:
+  ports:
+  - name: tls
+    port: 443
+    protocol: TCP
+    targetPort: 8443
+  publishNotReadyAddresses: true
+  selector:
+    app: sample
+    role: server
+  type: LoadBalancer

@@ -1,0 +1,5 @@
+steps:
+  - label: ":js: Build/Test Frontend"
+    agents: &agentConfig
+      "gcp:project-id": "cookies-co"
+    command: "make ci TESTS=//tests/frontend TARGETS=//app/frontend CI=yes"
