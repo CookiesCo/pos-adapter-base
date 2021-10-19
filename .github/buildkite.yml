@@ -7,13 +7,8 @@ steps:
       - chronotc/monorepo-diff#v2.0.4:
           diff: "git diff --name-only HEAD~1"
           watch:
-            - path: app/backend
+            - path: adapter/
               config:
-                label: ":buildkite: Build/Test Backend"
-                command: "buildkite-agent pipeline upload infra/devops/backend.build.yml"
-                agents: *agentConfig
-            - path: app/frontend
-              config:
-                label: ":buildkite: Build/Test Frontend"
-                command: "buildkite-agent pipeline upload infra/devops/frontend.build.yml"
+                label: ":buildkite: Build/Test Adapter"
+                command: "buildkite-agent pipeline upload infra/devops/adapter.build.yml"
                 agents: *agentConfig

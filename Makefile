@@ -1,6 +1,6 @@
 
 #
-# Makefile: Sample App
+# Makefile: POS Adapter Base
 #
 
 MAKEFLAGS += --no-print-directory
@@ -25,10 +25,10 @@ QUIET ?= no
 VERBOSE ?= no
 DEBUG ?= no
 COLORS ?= yes
-COVERAGE ?= yes
-PROJECT_NAME ?= sample-app
-DOCKER_REGISTRY ?= us.gcr.io/cookies-co
-DOCKER_REPOSITORY ?= dev/sample-app/node
+COVERAGE ?= no
+PROJECT_NAME ?= pos-adapter-base
+DOCKER_REGISTRY ?= us.gcr.io/opencannabis-tools
+DOCKER_REPOSITORY ?= adapter/base
 GITSTATE ?= $(shell git describe --tags --always)
 IMAGE_VERSION ?= v$(shell date -u '+%Y%m%d')-$(GITSTATE)
 

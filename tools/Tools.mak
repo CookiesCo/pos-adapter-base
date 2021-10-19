@@ -3,7 +3,7 @@
 # Tooling: Sample App
 #
 
-ENABLE_NODE = yes
+ENABLE_NODE = no
 ENABLE_JAVA = yes
 ENABLE_GRCOV = yes
 ENABLE_PYTHON = yes
@@ -11,8 +11,8 @@ ENABLE_GCLOUD = yes
 ENABLE_DOCKER = yes
 ENABLE_BAZEL = yes
 ENABLE_SKAFFOLD = yes
-ENABLE_K8S = yes
-ENABLE_HELM = yes
+ENABLE_K8S = no
+ENABLE_HELM = no
 ENABLE_MAVEN = no
 
 

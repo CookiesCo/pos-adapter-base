@@ -1,6 +1,6 @@
 
 directories:
-  app
+  adapter
   infra
   tests
   tools
@@ -10,16 +10,13 @@ shard_sync: true
 build_flags:
   --config=dev
 
-workspace_type: javascript
+workspace_type: java
 
 additional_languages:
-  typescript
-
-ts_config_rules:
-  //:tsconfig.json
+  kotlin
 
 test_sources:
   tests/*
 
 targets:
-  //app/...
+  //adapter/...

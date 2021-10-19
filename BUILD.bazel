@@ -1,26 +1,15 @@
-load(
-    "@npm//@bazel/typescript:index.bzl",
-    "ts_config",
-)
-
 package(
     default_visibility = ["//visibility:public"],
 )
 
 exports_files([
     "package.json",
-    "tsconfig.json",
     "skaffold.yaml",
 ])
 
 filegroup(
     name = "package",
     srcs = [":package.json"],
-)
-
-ts_config(
-    name = "tsconfig",
-    src = ":tsconfig.json",
 )
 
 alias(
